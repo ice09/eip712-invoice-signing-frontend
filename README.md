@@ -1,16 +1,13 @@
+# Account Receivable Signing Demo
+
+In this demo you are signing an invoice of Tessier-Ashpool SA to Weyland-Yutani Corp with your MetaMask account.
+
+The resulting signature can be verified and checked against the Smart Contract in the [invoice-verifier project].
+
 # EIP712 Signing Demo
 
-This is a demonstration of EIP712 signing support via MetaMask's
-`eth_signTypedData_v3` API call.
+This is derived from the demonstration of EIP712 signing support (EIP712 Signing Demo) via MetaMask's `eth_signTypedData_v3` API call.
 
-[Try it here](https://weijiekoh.github.io/eip712-signing-demo/index.html).
+[Try the original version here.](https://weijiekoh.github.io/eip712-signing-demo/index.html)
 
-You need a version of MetaMask that supports eth_signTypedData_v3 to use this
-demo.
-
-Please use [version 4.10.0](https://github.com/MetaMask/metamask-extension/releases/tag/v4.10.0)
-as at the time of writing, [version 4.13.0](https://github.com/MetaMask/metamask-extension/releases/tag/v4.13.0)
-is a temporary revert to 4.11.1, which in turn does not support EIP712.
-
-It includes copy-and-paste Solidity code that performs EIP712 hashing and
-`ecrecover`y on-chain. 
+You need a version of MetaMask that supports eth_signTypedData_v3 to use this demo (4.14+).

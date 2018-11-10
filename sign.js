@@ -10,17 +10,23 @@ function parseSignature(signature) {
   }
 }
 
-function genSolidityVerifier(signature, signer) {
-	return solidityCode.replace("<SIGR>", signature.r)
+function genCsv(signature, signer, ard) {
+	return csv.replace("<SIGR>", signature.r)
 	  .replace("<SIGS>", signature.s)
     .replace("<SIGV>", signature.v)
-    .replace("<SIGNER>", signer);
+    .replace("<SIGNER>", signer)
+    .replace("<ID>", ard.id)
+    .replace("<SELLER>", ard.seller)
+    .replace("<BUYER>", ard.buyer)
+    .replace("<DUEDATE>", ard.duedate)
+    .replace("<TOTAL>", ard.total)
 }
 
 window.onload = function (e) {
-  var res = document.getElementById("response");
+  var res = document.getElementById("resdiv");
+  var inv = document.getElementById("inv");
   res.style.display = "none";
-
+  inv.style.display = "block";
   // force the user to unlock their MetaMask
   if (web3.eth.accounts[0] == null) {
     alert("Please unlock MetaMask first");
@@ -40,44 +46,46 @@ window.onload = function (e) {
       { name: "salt", type: "bytes32" },
     ];
 
-    const bid = [
-      { name: "amount", type: "uint256" },
-      { name: "bidder", type: "Identity" },
-    ];
-
-    const identity = [
-      { name: "userId", type: "uint256" },
-      { name: "wallet", type: "address" },
+    const ard = [
+      { name: "id", type: "bytes32" },
+      { name: "seller", type: "address" },
+      { name: "buyer", type: "address" },
+      { name: "duedate", type: "bytes32" },
+      { name: "total", type: "uint256" },
     ];
 
     const domainData = {
-      name: "My amazing dApp",
-      version: "2",
-      chainId: parseInt(web3.version.network, 10),
+      name: "Account Receivable Signer",
+      version: "1",
+      chainId: 1,
       verifyingContract: "0x1C56346CD2A2Bf3202F771f50d3D14a367B48070",
       salt: "0xf2d857f4a3edcb9b78b4d503bfe733db1e3f6cdc2b7971ee739626c97e86a558"
     };
 
     var message = {
-      amount: 100,
-      bidder: {
-        userId: 323,
-        wallet: "0x3333333333333333333333333333333333333333"
-      }
+      id: '0x' + keccak256(document.getElementById("id").value),
+      seller: document.getElementById("seller").value,
+      buyer: document.getElementById("buyer").value,
+      duedate: '0x' + keccak256(document.getElementById("due").value),
+      total: document.getElementById("total").value
     };
+    console.log(message);
+
+    //"0xf2d857f4a3edcb9b78b4d503bfe733db1e3f6cdc2b7971ee739626c97e86a558","0x9c019724e411F546d3AC6D42861A5e7D81C0f497","0x1C56346CD2A2Bf3202F771f50d3D14a367B48070","01.04.2100","1000000"
     
-    const data = JSON.stringify({
+    data = JSON.stringify({
       types: {
         EIP712Domain: domain,
-        Bid: bid,
-        Identity: identity,
+        Ard: ard
       },
       domain: domainData,
-      primaryType: "Bid",
+      primaryType: "Ard",
       message: message
     });
 
     const signer = web3.eth.accounts[0];
+    console.log(data);
+    //data='{"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"},{"name":"salt","type":"bytes32"}],"Bid":[{"name":"amount","type":"uint256"},{"name":"bidder","type":"Identity"}],"Identity":[{"name":"userId","type":"uint256"},{"name":"wallet","type":"address"}]},"domain":{"name":"My amazing dApp","version":"2","chainId":1,"verifyingContract":"0x1C56346CD2A2Bf3202F771f50d3D14a367B48070","salt":"0xf2d857f4a3edcb9b78b4d503bfe733db1e3f6cdc2b7971ee739626c97e86a558"},"primaryType":"Bid","message":{"amount":100,"bidder":{"userId":323,"wallet":"0x3333333333333333333333333333333333333333"}}}';
 
     web3.currentProvider.sendAsync(
       {
@@ -93,7 +101,8 @@ window.onload = function (e) {
         const signature = parseSignature(result.result.substring(2));
 
         res.style.display = "block";
-        res.value = genSolidityVerifier(signature, signer);
+        inv.style.display = "none";
+        document.getElementById("response").value = genCsv(signature, signer, message);
       }
     );
   };

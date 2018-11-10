@@ -1,0 +1,3 @@
+const csv =
+`"<ID>","<SELLER>","<BUYER>","<DUEDATE>",<TOTAL>,"<SIGR>","<SIGS>","<SIGV>"`.trim();
+//{"id":"0xdbdbdc3617592acf803fc5617373ddbccbb11d3ad96aa2ab0218d139bbd37212","seller":"0xc0259Ec02E46E0f39BEf80aa834F20A897013AaA","buyer":"0x9c019724e411F546d3AC6D42861A5e7D81C0f497","duedate":"0xb06cc5315907b1af1b272dda5d76d7df662fd8804bb87e87a2a79f974b49909d","amount":100000}
