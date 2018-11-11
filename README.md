@@ -5,8 +5,9 @@ The resulting signature can be verified and checked against the Smart Contract i
 
 # Setup
 
-* Serve files locally using a web server, a simple way to do this is running `python -m SimpleHTTPServer 8000` in the root directory
-* Make sure MetaMask is installed and the correct account for signing is chosen
+* Clone this repo or download ZIP
+* Serve files locally using a web server, eg. by running `python -m SimpleHTTPServer 8000` in the root directory
+* Make sure MetaMask is installed and the correct account for signing is selected
 
 # Usage
 
